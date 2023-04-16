@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
-using System.Linq;
-using System;
+using GAR_table.Models;
 
 namespace GAR.Controllers
 {
@@ -12,7 +11,7 @@ namespace GAR.Controllers
         #region xml
 
         // General
-        static private readonly string path = "C:\\Practice\\Web\\GAR\\";
+        static private readonly string path = "C:\\Practice\\Web\\GAR_table\\gar-xml\\";
 
         static private readonly XDocument xlevels = XDocument.Load(path + "AS_OBJECT_LEVELS_20230320_0c63ffea-e5ce-4b68-bd33-eca4ba0bb0e9.xml");
         static private readonly XElement? levels = xlevels.Element("OBJECTLEVELS");

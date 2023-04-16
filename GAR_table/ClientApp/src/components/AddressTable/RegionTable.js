@@ -35,7 +35,7 @@ export const RegionTable = () => {
         {
           loaded ?
             childs.map(address => <Region address={address}/>)
-            : <tr><td colSpan={5}>Загрузка...</td></tr>
+            : <tr><td colSpan={8}>Загрузка...</td></tr>
         }
       </tbody>
     </table>

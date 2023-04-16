@@ -1,4 +1,4 @@
-namespace GAR
+namespace GAR_table.Models
 {
     public class Param_info
     {

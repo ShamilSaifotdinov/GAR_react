@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GAR_table.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GAR.Controllers
 {
