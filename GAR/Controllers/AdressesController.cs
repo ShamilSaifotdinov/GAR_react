@@ -10,24 +10,32 @@ namespace GAR.Controllers
         private readonly ILogger<AddressesController> _logger;
 
         #region xml
-        static private readonly XDocument xobjects = XDocument.Load("C:\\Practice\\Web\\GAR\\AS_ADDR_OBJ_20230320_80f600ee-382e-49df-a495-7110e8e0950d.xml");
-        // получаем корневой узел
-        static private readonly XElement? objects = xobjects.Element("ADDRESSOBJECTS");
 
-        static private readonly XDocument xlevels = XDocument.Load("C:\\Practice\\Web\\GAR\\AS_OBJECT_LEVELS_20230320_0c63ffea-e5ce-4b68-bd33-eca4ba0bb0e9.xml");
+        // General
+        static private readonly string path = "C:\\Practice\\Web\\GAR\\";
+
+        static private readonly XDocument xlevels = XDocument.Load(path + "AS_OBJECT_LEVELS_20230320_0c63ffea-e5ce-4b68-bd33-eca4ba0bb0e9.xml");
         static private readonly XElement? levels = xlevels.Element("OBJECTLEVELS");
 
-        static private readonly XDocument xadm_hierarchy = XDocument.Load("C:\\Practice\\Web\\GAR\\AS_ADM_HIERARCHY_20230320_f7bcb5da-0787-4d70-9c5d-e69b1011636e.xml");
-        static private readonly XElement? adm_hierarchy = xadm_hierarchy.Element("ITEMS");
+        static private readonly XDocument xparam_types = XDocument.Load(path + "AS_PARAM_TYPES_20230320_9337ae8a-c01e-41c7-a8d5-2e9a29f92fe5.xml");
+        static private readonly XElement? obj_params_types = xparam_types.Element("PARAMTYPES");
 
-        static private readonly XDocument xmun_hierarchy = XDocument.Load("C:\\Practice\\Web\\GAR\\AS_MUN_HIERARCHY_20230320_1741feec-eaee-41aa-8977-ed7937725753.xml");
-        static private readonly XElement? mun_hierarchy = xmun_hierarchy.Element("ITEMS");
+        // Region
 
-        static private readonly XDocument xparams = XDocument.Load("C:\\Practice\\Web\\GAR\\AS_ADDR_OBJ_PARAMS_20230320_f1a5ba81-3292-4cec-8a60-20e89865601b.xml");
+        static private readonly string pathWithRegion = path + "87\\";
+
+        static private readonly XDocument xobjects = XDocument.Load(pathWithRegion + "AS_ADDR_OBJ_20230320_80f600ee-382e-49df-a495-7110e8e0950d.xml");
+        static private readonly XElement? objects = xobjects.Element("ADDRESSOBJECTS");
+
+        static private readonly XDocument xparams = XDocument.Load(pathWithRegion + "AS_ADDR_OBJ_PARAMS_20230320_f1a5ba81-3292-4cec-8a60-20e89865601b.xml");
         static private readonly XElement? obj_params = xparams.Element("PARAMS");
 
-        static private readonly XDocument xparam_types = XDocument.Load("C:\\Practice\\Web\\GAR\\AS_PARAM_TYPES_20230320_9337ae8a-c01e-41c7-a8d5-2e9a29f92fe5.xml");
-        static private readonly XElement? obj_params_types = xparam_types.Element("PARAMTYPES");
+        static private readonly XDocument xadm_hierarchy = XDocument.Load(pathWithRegion + "AS_ADM_HIERARCHY_20230320_f7bcb5da-0787-4d70-9c5d-e69b1011636e.xml");
+        static private readonly XElement? adm_hierarchy = xadm_hierarchy.Element("ITEMS");
+
+        static private readonly XDocument xmun_hierarchy = XDocument.Load(pathWithRegion + "AS_MUN_HIERARCHY_20230320_1741feec-eaee-41aa-8977-ed7937725753.xml");
+        static private readonly XElement? mun_hierarchy = xmun_hierarchy.Element("ITEMS");
+
         #endregion
 
         public AddressesController(ILogger<AddressesController> logger)
