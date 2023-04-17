@@ -1,29 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { Modal } from '../modal/Modal'
+import { useAddresses } from '../../hooks/address.hook'
 
 
 export const ObjectInfo = ({ isModal, setModal, objectId }) => {
-    const [isLoading, setLoading] = useState(true)
     const [info, setInfo] = useState([])
+    const [isLoading, getAddresses] = useAddresses()
 
-    
     useEffect(() => {
-        const getInfo = async () => {
-            try {
-                const response = await fetch(`addresses/info/${objectId}`);
-                const data = await response.json()
-                data.sort((a, b) => a.id - b.id)
-                // console.log(data)
-                setInfo(data)
-            } catch (error) {
-                // alert(error)
-                setInfo([])
-            }
-            setLoading(false)
-        }
-        getInfo()
-    }, [objectId])
-
+        getAddresses(`info/${objectId}`)
+            .then((data) => setInfo(data))
+    }, [])
 
     return (
         <Modal
@@ -35,17 +22,17 @@ export const ObjectInfo = ({ isModal, setModal, objectId }) => {
                     <tbody>
                         {
                             info.length
-                                ? info.map((item, i) =>
-                                    <tr key={i}>
+                                ? info.map((item) =>
+                                    <tr key={item.id}>
                                         <td>{item.name}</td>
                                         <td>{item.value}</td>
                                     </tr>)
-                                : <tr key="1" colSpan={2}><td>Данные отсутствует</td></tr>
+                                : <tr colSpan={2}><td>Данные отсутствует</td></tr>
                         }
                     </tbody>
                 </table>
             }
-            footer={<button type="button" class="btn btn-primary" onClick={() => setModal(false)}>Закрыть</button>}
+            footer={<button type="button" className="btn btn-primary" onClick={() => setModal(false)}>Закрыть</button>}
             onClose={() => setModal(false)}
         />
     )

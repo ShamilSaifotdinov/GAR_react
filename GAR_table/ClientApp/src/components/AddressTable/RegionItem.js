@@ -1,31 +1,32 @@
-import React, { useEffect, useState } from 'react'
-import { AddressTable } from './Table';
+import React, { useState } from 'react'
+import { Hierarchy } from './Hierarchy';
+import { ObjectInfo } from './ObjectInfo';
 
-export const RegionItem = ({ id, type, name }) => {
-  const [childs, setChilds] = useState([])
+export const RegionItem = ({ address }) => {
+  const [openInfo, setInfo] = useState(false);
   const [open, setOpen] = useState(false)
 
-
-  const getAddresses = async (id) => {
-    const response = await fetch(`addresses/${type}/${id}`);
-    const data = await response.json();
-    setChilds(data);
-  }
-
-  useEffect(() => {
-    if (open && !childs.length) {
-      getAddresses(id)
-    }
-  }, [open])
-
   return <>
-    <thead>
-      <tr onClick={() => setOpen(!open)}>
-        <th>{name}</th>
-      </tr>
-    </thead>
+    <tr>
+      <td onClick={() => setOpen(!open)} style={{width: "32.8px"}}><i className={open ? "bi bi-chevron-down" : "bi bi-chevron-right"}></i></td>
+      <td onClick={() => setInfo(true)}>{address.id}</td>
+      <td onClick={() => setInfo(true)}>{address.name}</td>
+      <td onClick={() => setInfo(true)}>{address.typeName}</td>
+      <td onClick={() => setInfo(true)}>{address.code}</td>
+      <td onClick={() => setInfo(true)}>{address.okato}</td>
+      <td onClick={() => setInfo(true)}>{address.oktmo}</td>
+      <td onClick={() => setInfo(true)}>{address.level}</td>
+      {openInfo && <ObjectInfo isModal={openInfo} setModal={setInfo} objectId={address.id}/>}
+    </tr>
     {
-      open && ( childs.length ? <AddressTable addresses={childs} type={type} /> : "Дочернии элементы отсутствуют" )
+      open &&
+      <tr>
+        <td></td>
+        <td colSpan={7} className='p-0'>
+          <Hierarchy id={address.id} type={"adm"} name="Административное деление" />
+          <Hierarchy id={address.id} type={"mun"} name="Муниципальное деление" />
+        </td>
+      </tr>
     }
   </>
 }

@@ -22,7 +22,7 @@ export const Modal = ({ isVisible = false, title, content, footer, onClose }) =>
         <div className={c["modal-header"]}>
           <h3 className={c["modal-title"]}>{title}</h3>
           <span className={c["modal-close"]} onClick={onClose}>
-            <i class="bi bi-x-lg"></i>
+            <i className="bi bi-x-lg"></i>
           </span>
         </div>
         <div className={c["modal-body"]}>

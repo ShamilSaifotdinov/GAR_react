@@ -48,7 +48,6 @@ namespace GAR.Controllers
 
             if (objects is not null && objects.Any())
             {
-
                 foreach (XElement obj in objects)
                 {
                     XAttribute? ID = obj.Attribute("OBJECTID");
@@ -64,9 +63,9 @@ namespace GAR.Controllers
                         ID = obj.Attribute("OBJECTID")?.Value,
                         Name = obj.Attribute("NAME")?.Value,
                         TypeName = obj.Attribute("TYPENAME")?.Value,
-                        Code = getInfo(ID?.Value, "CODE"),
-                        OKATO = getInfo(ID?.Value, "OKATO"),
-                        OKTMO = getInfo(ID?.Value, "OKTMO"),
+                        Code = GetInfo(ID?.Value, "CODE"),
+                        OKATO = GetInfo(ID?.Value, "OKATO"),
+                        OKTMO = GetInfo(ID?.Value, "OKTMO"),
                         Level = $"{LEVEL?.Value}. {LEVEL_NAME?.Value}",
                     });
                 }
@@ -104,6 +103,21 @@ namespace GAR.Controllers
             }
             return childs;
         }
+        protected internal static string? GetInfo(string? id, string type)
+        {
+            string? type_id = obj_params_types?.Elements("PARAMTYPE")
+                            .FirstOrDefault(p => p.Attribute("CODE")?.Value == type)?
+                            .Attribute("ID")?
+                            .Value;
+
+            var xobj_param = obj_params?
+                .Elements("PARAM")
+                .FirstOrDefault(p => p.Attribute("OBJECTID")?.Value == id
+                    && p.Attribute("TYPEID")?.Value == type_id
+                    && p.Attribute("CHANGEIDEND")?.Value == "0")?
+                .Attribute("VALUE");
+            return xobj_param?.Value;
+        }
 
         //Routes
 
@@ -138,7 +152,8 @@ namespace GAR.Controllers
             var xobj_params = obj_params?
                 .Elements("PARAM")
                 .Where(p => p.Attribute("OBJECTID")?.Value == id
-                    && p.Attribute("CHANGEIDEND")?.Value == "0");
+                    && p.Attribute("CHANGEIDEND")?.Value == "0")
+                .OrderBy(p => Int32.Parse(p.Attribute("TYPEID")?.Value));
 
             List<Param_info> obj_info = new();
 
@@ -161,67 +176,5 @@ namespace GAR.Controllers
             }
             return obj_info;
         }
-
-        static public string? getInfo(string? id, string type)
-        {
-            string? type_id = obj_params_types?.Elements("PARAMTYPE")
-                            .FirstOrDefault(p => p.Attribute("CODE")?.Value == type)?
-                            .Attribute("ID")?
-                            .Value;
-
-            var xobj_param = obj_params?
-                .Elements("PARAM")
-                .FirstOrDefault(p => p.Attribute("OBJECTID")?.Value == id
-                    && p.Attribute("TYPEID")?.Value == type_id
-                    && p.Attribute("CHANGEIDEND")?.Value == "0")?
-                .Attribute("VALUE");
-            return xobj_param?.Value;
-        }
-        //protected internal static List<GAR_elem> PrintElements(IEnumerable<XElement>? objects, List<GAR_elem> elems, XElement? hierarchy)
-        //{
-        //    if (objects is not null && objects.Any())
-        //    {
-        //        foreach (XElement obj in objects)
-        //        {
-        //            XAttribute? ID = obj.Attribute("OBJECTID");
-        //            XAttribute? LEVEL = obj.Attribute("LEVEL");
-
-        //            var LEVEL_NAME = levels?
-        //                .Elements("OBJECTLEVEL")
-        //                .FirstOrDefault(p => p.Attribute("LEVEL")?.Value == LEVEL?.Value)
-        //                ?.Attribute("NAME");
-
-        //            elems.Add(new GAR_elem
-        //            {
-        //                ID = obj.Attribute("OBJECTID")?.Value,
-        //                Name = obj.Attribute("NAME")?.Value,
-        //                TypeName = obj.Attribute("TYPENAME")?.Value,
-        //                Level = LEVEL_NAME?.Value,
-        //            });
-
-        //            Console.WriteLine();
-
-        //            PrintElements(GetChilds(ID?.Value, hierarchy), elems, hierarchy);
-        //        }
-
-        //    }
-
-        //    return elems;
-        //}
-
-        //[HttpGet]
-        //public IEnumerable<GAR_elem> Get()
-        //{
-        //    IEnumerable<XElement>? region = objects?
-        //        .Elements("OBJECT")
-        //        .Where(p => p.Attribute("LEVEL")?.Value == "1"
-        //            && p.Attribute("ISACTIVE")?.Value == "1"
-        //            && p.Attribute("ISACTUAL")?.Value == "1");
-
-
-        //    List<GAR_elem> elems = new();
-
-        //    return PrintElements(region, elems, mun_hierarchy).ToArray();
-        //}
     }
 }
