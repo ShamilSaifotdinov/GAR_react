@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Modal } from '../modal/Modal'
+import { Modal } from '../../hooks/modal.hook'
 import { useAddresses } from '../../hooks/address.hook'
 
 
